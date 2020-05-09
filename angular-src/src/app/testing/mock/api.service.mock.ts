@@ -14,12 +14,20 @@ export class MockApiService {
   registeredUsers: UserProfile[] = [];
 
   login(username: string, password: string): Observable<LoginActionResponse> {
-    return of({
-      status: 'ok',
-      data: {
-        token: 'randomtoken',
-        profile: this.rootUser,
-      },
+    if (username === 'admin' && password === 'admin') {
+      return of({
+        status: 'ok',
+        data: {
+          token: 'randomtoken',
+          profile: this.rootUser,
+        },
+      });
+    }
+
+    // All other requests should return an error
+    return throwError({
+      status: 'error',
+      error: 'Invalid username\\password entered!',
     });
   }
 
